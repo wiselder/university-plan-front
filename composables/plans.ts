@@ -6,38 +6,45 @@ import {
 import { useApi } from './api'
 import { Plan } from '~/models/Plan'
 import { DayPlan } from '~/models/DayPlan'
-import { GroupWeekPlanRequest } from '~/models/payloads/group/GroupWeekPlanRequest'
-import { TeacherDayPlanRequest } from '~/models/payloads/teacher/TeacherDayPlanRequest'
 import { KEYS } from '~/constants/queries'
-import { GroupDayPlanRequest } from '~/models/payloads/group/GroupDayPlanRequest'
+import { Bell } from '~/models/Bell'
+import { TeacherDayPlanRequest } from '~/models/requests/teacher/TeacherDayPlanRequest'
+import { GroupWeekPlanRequest } from '~/models/requests/group/GroupWeekPlanRequest'
+import { GroupDayPlanRequest } from '~/models/requests/group/GroupDayPlanRequest'
 
 const BASE_URL = 'plan'
 
 export default function usePlans() {
-  const { request } = useApi()
+  const { request, post } = useApi()
 
-  function findByTeacherWeek(id: Ref<number>): UseQueryReturnType<Plan, unknown> {
+  function findByTeacherWeek(id: number): UseQueryReturnType<Plan, unknown> {
     return useQuery([KEYS.TEACHER_WEEK_PLAN, id], async () => 
-      await request<Plan>(`${BASE_URL}/teacher/week`))
+      await post<Plan>(`${BASE_URL}/teacher/week`))
   }
 
   function findByTeacherDay(teacherRequest: TeacherDayPlanRequest): UseQueryReturnType<DayPlan, unknown> {
     return useQuery([KEYS.TEACHER_DAY_PLAN, teacherRequest], async () => 
-      await request<DayPlan>(`${BASE_URL}/teacher/day`))
+      await post<DayPlan>(`${BASE_URL}/teacher/day`))
   }
 
   function findByGroupWeek(groupRequest: GroupWeekPlanRequest): UseQueryReturnType<Plan, unknown> {
     return useQuery([KEYS.GROUP_WEEK_PLAN, groupRequest], async () => 
-      await request<Plan>(`${BASE_URL}/group/week`))
+      await post<Plan>(`${BASE_URL}/group/week`))
   }
 
   function findByGroupDay(groupRequest: GroupDayPlanRequest): UseQueryReturnType<DayPlan, unknown> {
     return useQuery([KEYS.GROUP_DAY_PLAN, groupRequest], async () => 
-      await request<DayPlan>(`${BASE_URL}/group/day`))
+      await post<DayPlan>(`${BASE_URL}/group/day`))
+  }
+
+  function getBells(): UseQueryReturnType<Bell[], unknown> {
+    return useQuery([KEYS.BELLS_LIST], async () => 
+      await request<Bell[]>(`${BASE_URL}/bells`))
   }
 
   return {
     findByTeacherWeek, findByTeacherDay,
-    findByGroupWeek, findByGroupDay
+    findByGroupWeek, findByGroupDay,
+    getBells
   }
 }

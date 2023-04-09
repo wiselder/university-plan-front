@@ -1,6 +1,6 @@
 import isEmpty from 'lodash/isEmpty'
 
-const API_URL = ''
+const API_URL = 'http://yamcs.ru:8080'
 
 export function useApi() {
   function request<T>(
@@ -37,7 +37,7 @@ export function useApi() {
     await request<T>(url, 'PUT', data, params)    
   }
   
-  async function remove<T>(
+  async function remove(
     url: string,
     params: Record<string, string | number | undefined> = {}): Promise<void> {
     await request(url, 'DELETE', {}, params)
