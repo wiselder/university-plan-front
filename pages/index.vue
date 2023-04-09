@@ -1,7 +1,44 @@
 <template>
-  Test
+  <div class="flex gap-2">
+    <the-input
+      v-model="pattern"
+      name="pattern"
+      type="text"
+      placeholder="ФИО"
+      class="grow
+              rounded-md 
+              shadow-md"/>
 
-  {{ teachers }}
+    <the-select
+      v-model="selectedEntity"
+      class="rounded-md
+             shadow-md">
+      <option value="" disabled selected>
+        Преподаватель или студент?
+      </option>
+
+      <option 
+        v-for="(entity, i) in entities" :key="i"
+        :value="entity">
+        {{ entity }}
+      </option>     
+    </the-select>
+
+    <the-select
+      v-model="selectedTime"
+      class="rounded-md
+             shadow-md"> 
+      <option value="" disabled selected>
+        Выберите период
+      </option>
+
+      <option 
+        v-for="(timeType, i) in times" :key="i"
+        :value="timeType">
+        {{ timeType }}
+      </option>      
+    </the-select>
+  </div>
 </template>
 
 <script setup lang="ts">
@@ -9,9 +46,14 @@ import { ref } from '#imports'
 
 import { useTeachers } from '~/composables/teachers'
 
-const teachersPattern = ref('test')
+const pattern = ref()
+const selectedTime = ref()
+const selectedEntity = ref()
+
+const times = ['день', 'неделя']
+const entities = ['преподаватель', 'студент']
 
 const { getList: getTeachers } = useTeachers()
 
-const { isLoading: isResourcesLoading, data: teachers } = getTeachers(teachersPattern.value)
+const { isLoading: isResourcesLoading, data: teachers } = getTeachers(pattern.value)
 </script>

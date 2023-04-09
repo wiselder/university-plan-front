@@ -13,7 +13,7 @@ import { AuditoriumUpdateRequest } from '~/models/requests/auditorium/Auditorium
 
 const BASE_URL = 'auditorium'
 
-export function useDisciplines() {
+export function useAuditoriums() {
   const queryClient = useQueryClient()
 
   const { request, post } = useApi()
