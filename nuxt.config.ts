@@ -15,7 +15,7 @@ export default defineNuxtConfig({
   components: [{
     path: '~/components',
     pathPrefix: false, 
-  }],
+  }],                 
 
   css: [
     '@unocss/reset/tailwind.css'

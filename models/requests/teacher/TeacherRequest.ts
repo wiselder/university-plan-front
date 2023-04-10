@@ -1,3 +1,3 @@
 export interface TeacherRequest {
-  fullName: string
+  name: string
 }

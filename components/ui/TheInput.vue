@@ -22,11 +22,11 @@ const props = defineProps<{
   name: string
   type: string
   placeholder?: string
-  modelValue?: string
+  modelValue?: any
 }>()
 
 const emit = defineEmits<{
-  (e: 'update:modelValue', value: string): void
+  (e: 'update:modelValue', value: any): void
 }>()
 
 const text = ref(props.modelValue)

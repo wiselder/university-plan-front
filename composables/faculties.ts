@@ -44,10 +44,10 @@ export function useFaculties() {
 
   function addGroup(): UseMutationReturnType<void, unknown, FacultyCreateGroupRequest, unknown> {
     return useMutation(async (payload: FacultyCreateGroupRequest) => {
-      return post<Group>(`${BASE_URL}/${payload.id}/groups`, pick(payload.group, [
-        'course',
+      return post<Group>(`${BASE_URL}/${payload.id}/groups`, pick(payload, [
+        'subNumber',
         'number',
-        'subNumber'
+        'course'
       ]))
     }, {
       onSuccess: () => Promise.all([    

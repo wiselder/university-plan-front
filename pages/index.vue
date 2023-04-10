@@ -39,6 +39,20 @@
       </option>      
     </the-select>
   </div>
+
+  <div class="flex justify-center">
+    <nuxt-link :to="'/admin'">
+      <the-button
+        class="bg-red-500
+              text-gray-50
+              rounded-md
+              shadow-md
+              px-3.5 py-2
+              mt-2">
+        Панель администратора
+      </the-button>
+    </nuxt-link>
+  </div>
 </template>
 
 <script setup lang="ts">
