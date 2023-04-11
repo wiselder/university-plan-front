@@ -5,7 +5,7 @@ import {
   useQuery, 
   useQueryClient
 } from '@tanstack/vue-query'
-import { Ref } from '#imports'
+import { Ref } from 'nuxt/dist/app/compat/capi'
 
 import { useApi } from './api'
 import { KEYS } from '~/constants/queries'

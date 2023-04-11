@@ -52,5 +52,5 @@ const { getList } = useTeachers()
 
 const pattern = ref('')
 
-const { data: teachers } = getList(pattern.value)
+const { data: teachers } = getList(pattern)
 </script>

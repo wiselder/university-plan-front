@@ -5,6 +5,7 @@ import {
   useQuery, 
   useQueryClient
 } from '@tanstack/vue-query'
+import { Ref } from 'nuxt/dist/app/compat/capi'
 
 import { useApi } from './api'
 import { Teacher } from '~/models/Teacher'
@@ -18,9 +19,9 @@ export function useTeachers() {
 
   const { request, post } = useApi()
 
-  function getList(pattern?: string): UseQueryReturnType<Teacher[], unknown> {
+  function getList(pattern?: Ref<string>): UseQueryReturnType<Teacher[], unknown> {
     return useQuery([KEYS.TEACHERS_LIST, pattern], async () => 
-      await request<Teacher[]>(`${BASE_URL}${pattern ? `?pattern=${pattern}` : ''}`))
+      await request<Teacher[]>(`${BASE_URL}${pattern?.value ? `?pattern=${pattern.value}` : ''}`))
   }
 
   function create(): UseMutationReturnType<void, unknown, TeacherRequest, unknown> {

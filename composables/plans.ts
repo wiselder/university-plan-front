@@ -11,15 +11,18 @@ import { Bell } from '~/models/Bell'
 import { TeacherDayPlanRequest } from '~/models/requests/teacher/TeacherDayPlanRequest'
 import { GroupWeekPlanRequest } from '~/models/requests/group/GroupWeekPlanRequest'
 import { GroupDayPlanRequest } from '~/models/requests/group/GroupDayPlanRequest'
+import { Ref } from 'nuxt/dist/app/compat/capi'
 
 const BASE_URL = 'plan'
 
-export default function usePlans() {
+export function usePlans() {
   const { request, post } = useApi()
 
-  function findByTeacherWeek(id: number): UseQueryReturnType<Plan, unknown> {
+  function findByTeacherWeek(id: Ref<number>): UseQueryReturnType<Plan, unknown> {
     return useQuery([KEYS.TEACHER_WEEK_PLAN, id], async () => 
-      await post<Plan>(`${BASE_URL}/teacher/week`))
+      await post<Plan>(`${BASE_URL}/teacher/week`, { 
+        'teacherId': id.value 
+      }))
   }
 
   function findByTeacherDay(teacherRequest: TeacherDayPlanRequest): UseQueryReturnType<DayPlan, unknown> {

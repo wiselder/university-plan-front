@@ -6,9 +6,9 @@
               rounded-md
               shadow-md">
     <div class="flex items-center justify-between">
-      {{ faculty.name }}
+      {{ faculty?.name }}
 
-      <nuxt-link :to="`/admin/faculties/${faculty.id}`">
+      <nuxt-link :to="`/admin/faculties/${faculty?.id}`">
         <the-button
           class="bg-green-500
                   text-gray-50
@@ -38,6 +38,8 @@
 </template>
 
 <script setup lang="ts">
+import { ref } from '#imports'
+
 import { useFaculties } from '~/composables/faculties'
 import { Faculty } from '~/models/Faculty'
 
@@ -47,5 +49,5 @@ const props = defineProps<{
 
 const { getGroups } = useFaculties()
 
-const { data: groups } = getGroups(props.faculty.id)
+const { data: groups } = getGroups(ref(props.faculty.id))
 </script>
