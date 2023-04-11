@@ -78,10 +78,12 @@ const { mutate } = addGroup()
 
 function createGroup(): void {
   mutate({ 
-    subNumber: group.subNumber,
-    number: group.number,
-    course: group.number,
+    subNumber: group.value.subNumber ?? 0,
+    number: group.value.number ?? 0,
+    course: group.value.number ?? 0,
     id: Number(route.params._id) 
   })
+
+  router.back()
 }
 </script>

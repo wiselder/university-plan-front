@@ -1,9 +1,9 @@
 export enum DayType {
-  MONDAY, 
-  TUESDAY, 
-  WEDNESDAY, 
-  THURSDAY, 
-  FRIDAY,
-  SATURDAY, 
-  SUNDAY
+  MONDAY = 'Понедельник', 
+  TUESDAY = 'Вторник', 
+  WEDNESDAY = 'Среда', 
+  THURSDAY = 'Четверг', 
+  FRIDAY = 'Пятница',
+  SATURDAY = 'Суббота', 
+  SUNDAY = 'Воскресенье'
 }

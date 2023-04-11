@@ -1,13 +1,18 @@
 <template>
   <h3 class="text-xl font-semibold text-gray-900
              mb-2">
-    Факультеты
+    Дисциплины
   </h3>
 
   <div class="flex flex-col gap-2">
-    <faculty-card
-      v-for="(faculty, i) in faculties" :key="i"
-      :faculty="faculty"/>
+    <div v-for="(discipline, i) in disciplines" :key="i"
+         class="border border-violet-500
+                text-lg font-semibold
+                px-3.5 py-2
+                rounded-md
+                shadow-md">
+      {{ discipline.name }}
+    </div>
   </div>
 
   <div class="flex justify-center gap-2">
@@ -22,7 +27,7 @@
       Назад
     </the-button>
 
-    <nuxt-link :to="'/admin/faculties/create'">
+    <nuxt-link :to="'/admin/disciplines/create'">
       <the-button
         class="bg-blue-500
                text-gray-50
@@ -37,13 +42,13 @@
 </template>
 
 <script setup lang="ts">
-import { useRouter } from '#imports'
+import { ref, useRouter } from '#imports'
 
-import { useFaculties } from '~/composables/faculties'
+import { useDisciplines } from '#imports'
 
 const router = useRouter()
 
-const { getList } = useFaculties()
+const { getList } = useDisciplines()
 
-const { data: faculties } = getList()
+const { data: disciplines } = getList()
 </script>

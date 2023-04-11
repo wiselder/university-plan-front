@@ -5,6 +5,7 @@ import {
   useQuery, 
   useQueryClient
 } from '@tanstack/vue-query'
+import { Ref } from '#imports'
 
 import { useApi } from './api'
 import { KEYS } from '~/constants/queries'
@@ -37,9 +38,9 @@ export function useFaculties() {
     })
   }
 
-  function getGroups(id: number): UseQueryReturnType<Group[], unknown> {
+  function getGroups(id: Ref<number>): UseQueryReturnType<Group[], unknown> {
     return useQuery([KEYS.FACULTY_GROUP_LIST, id], async () => 
-      await request<Group[]>(`${BASE_URL}/${id}/groups`))
+      await request<Group[]>(`${BASE_URL}/${id.value}/groups`))
   }
 
   function addGroup(): UseMutationReturnType<void, unknown, FacultyCreateGroupRequest, unknown> {

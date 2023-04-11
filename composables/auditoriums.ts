@@ -18,9 +18,9 @@ export function useAuditoriums() {
 
   const { request, post } = useApi()
 
-  function getList(pattern: string): UseQueryReturnType<Auditorium[], unknown> {
+  function getList(pattern?: string): UseQueryReturnType<Auditorium[], unknown> {
     return useQuery([KEYS.AUDITORIUMS_LIST, pattern], async () =>
-      await request<Auditorium[]>(`${BASE_URL}?pattern=${pattern}`))
+      await request<Auditorium[]>(`${BASE_URL}${pattern ? `?pattern=${pattern}` : ''}`))
   }
 
   function create(): UseMutationReturnType<void, unknown, AuditoriumUpdateRequest, unknown> {

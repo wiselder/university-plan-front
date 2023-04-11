@@ -14,7 +14,7 @@
       class="rounded-md
              shadow-md">
       <option value="" disabled selected>
-        Преподаватель или студент?
+        Преподаватель или группа
       </option>
 
       <option 
@@ -40,7 +40,19 @@
     </the-select>
   </div>
 
-  <div class="flex justify-center">
+  <div class="flex justify-center gap-2">
+    <nuxt-link :to="'/admin/lessons/create'">
+      <the-button
+        class="bg-lime-500
+               text-gray-50
+               rounded-md
+               shadow-md
+               px-3.5 py-2
+               mt-2">
+        Добавить пару
+      </the-button>
+    </nuxt-link>
+
     <nuxt-link :to="'/admin'">
       <the-button
         class="bg-red-500
@@ -65,7 +77,7 @@ const selectedTime = ref()
 const selectedEntity = ref()
 
 const times = ['день', 'неделя']
-const entities = ['преподаватель', 'студент']
+const entities = ['преподаватель', 'группа']
 
 const { getList: getTeachers } = useTeachers()
 

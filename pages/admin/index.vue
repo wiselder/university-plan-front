@@ -1,38 +1,16 @@
 <template>
   <div class="flex justify-center gap-2">
-    <nuxt-link :to="'/admin/faculties'">
+    <nuxt-link 
+      v-for="(button, i) in buttons"
+      :to="button.path">
       <the-button
-        class="bg-blue-500
-               text-gray-50
+        :class="button.color"
+        class="text-gray-50
                rounded-md
                shadow-md
                px-3.5 py-2
                mt-2">
-        Факультеты
-      </the-button>
-    </nuxt-link>
-
-    <nuxt-link :to="'/admin/auditoriums'">
-      <the-button
-        class="bg-light-blue-500
-               text-gray-50
-               rounded-md
-               shadow-md
-               px-3.5 py-2
-               mt-2">
-        Аудитории
-      </the-button>
-    </nuxt-link>
-
-    <nuxt-link :to="'/admin/teachers'">
-      <the-button
-        class="bg-orange-500
-               text-gray-50
-               rounded-md
-               shadow-md
-               px-3.5 py-2
-               mt-2">
-        Преподаватели
+        {{ button.text }}
       </the-button>
     </nuxt-link>
 
@@ -49,3 +27,23 @@
     </nuxt-link>
   </div>
 </template>
+
+<script setup lang="ts">
+const buttons = [{
+  text: 'Факультеты',
+  color: 'bg-blue-500',
+  path: '/admin/faculties'
+}, {
+  text: 'Аудитории',
+  color: 'bg-light-blue-500',
+  path: '/admin/auditoriums'
+}, {
+  text: 'Преподаватели',
+  color: 'bg-orange-500',
+  path: '/admin/teachers'
+}, {
+  text: 'Дисциплины',
+  color: 'bg-violet-500',
+  path: '/admin/disciplines'
+}]
+</script>

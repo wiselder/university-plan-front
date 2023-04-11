@@ -1,6 +1,7 @@
 <template>
   <select 
     v-model="selected"
+    :multiple="multiple"
     class="bg-gray-100
           border border-gray-600 focus:border-green-500
            text-base text-gray-900 placeholder:text-gray-500
@@ -15,6 +16,7 @@ import { ref, watch } from '#imports'
 
 const props = defineProps<{
   modelValue?: any
+  multiple?: boolean
 }>()
 
 const emit = defineEmits<{

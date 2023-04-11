@@ -18,9 +18,9 @@ export function useDisciplines() {
 
   const { request, post } = useApi()
 
-  function getList(pattern: string): UseQueryReturnType<Discipline[], unknown> {
+  function getList(pattern?: string): UseQueryReturnType<Discipline[], unknown> {
     return useQuery([KEYS.DISCIPLINES_LIST, pattern], async () =>
-      await request<Discipline[]>(`${BASE_URL}?pattern=${pattern}`))
+      await request<Discipline[]>(`${BASE_URL}${pattern ? `?pattern=${pattern}` : ''}`))
   }
 
   function create(): UseMutationReturnType<void, unknown, DisciplineUpdateRequest, unknown> {
