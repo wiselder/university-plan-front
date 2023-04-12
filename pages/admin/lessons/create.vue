@@ -105,7 +105,7 @@
       </option>
 
       <option 
-        v-for="(bell, i) in 7" :key="i"
+        v-for="(bell, i) in 8" :key="i"
         :value="bell">
         {{ bell }}
       </option>     
