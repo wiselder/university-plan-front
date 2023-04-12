@@ -95,6 +95,21 @@
         {{ day.text }}
       </option>     
     </the-select>
+
+    <the-select
+      v-model="lesson.bellOrdinal"
+      class="rounded-md
+             shadow-md">
+      <option value="" disabled selected>
+        Выберите номер пары
+      </option>
+
+      <option 
+        v-for="(bell, i) in 7" :key="i"
+        :value="bell">
+        {{ bell }}
+      </option>     
+    </the-select>
   </div>
 
   <div class="flex gap-2 justify-center">

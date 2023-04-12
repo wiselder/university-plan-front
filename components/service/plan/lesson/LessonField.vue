@@ -11,7 +11,7 @@
     </span>
 
     <span>
-      Аудитория: {{ lesson?.auditorium?.name }}
+      Аудитория: {{ lesson?.auditorium?.name }} | {{ lesson?.auditorium.address }}
     </span>
 
     <span class="flex flex-col">
