@@ -11,7 +11,7 @@ import { Bell } from '~/models/Bell'
 import { TeacherDayPlanRequest } from '~/models/requests/teacher/TeacherDayPlanRequest'
 import { GroupWeekPlanRequest } from '~/models/requests/group/GroupWeekPlanRequest'
 import { GroupDayPlanRequest } from '~/models/requests/group/GroupDayPlanRequest'
-import { Ref } from 'nuxt/dist/app/compat/capi'
+import { ComputedRef, Ref } from 'nuxt/dist/app/compat/capi'
 
 const BASE_URL = 'plan'
 
@@ -25,19 +25,25 @@ export function usePlans() {
       }))
   }
 
-  function findByTeacherDay(teacherRequest: TeacherDayPlanRequest): UseQueryReturnType<DayPlan, unknown> {
+  function findByTeacherDay(teacherRequest: Ref<TeacherDayPlanRequest>): UseQueryReturnType<DayPlan, unknown> {
     return useQuery([KEYS.TEACHER_DAY_PLAN, teacherRequest], async () => 
-      await post<DayPlan>(`${BASE_URL}/teacher/day`))
+      await post<DayPlan>(`${BASE_URL}/teacher/day`, teacherRequest.value), {
+        enabled: false
+      })
   }
 
   function findByGroupWeek(groupRequest: GroupWeekPlanRequest): UseQueryReturnType<Plan, unknown> {
     return useQuery([KEYS.GROUP_WEEK_PLAN, groupRequest], async () => 
-      await post<Plan>(`${BASE_URL}/group/week`))
+      await post<Plan>(`${BASE_URL}/group/week`), {
+        enabled: false
+      })
   }
 
   function findByGroupDay(groupRequest: GroupDayPlanRequest): UseQueryReturnType<DayPlan, unknown> {
     return useQuery([KEYS.GROUP_DAY_PLAN, groupRequest], async () => 
-      await post<DayPlan>(`${BASE_URL}/group/day`))
+      await post<DayPlan>(`${BASE_URL}/group/day`), {
+        enabled: false
+      })
   }
 
   function getBells(): UseQueryReturnType<Bell[], unknown> {

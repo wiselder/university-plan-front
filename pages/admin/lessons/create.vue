@@ -120,8 +120,6 @@
       Создать
     </the-button>
   </div>
-
-  {{ lesson }}
 </template>
 
 <script setup lang="ts">

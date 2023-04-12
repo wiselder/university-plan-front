@@ -26,8 +26,8 @@ export function useApi() {
   async function post<T>(
     url: string,
     data: object = {},
-    params: Record<string, string | number | undefined> = {}): Promise<void> {
-    await request<T>(url, 'POST', data, params)
+    params: Record<string, string | number | undefined> = {}): Promise<T | { error: unknown}> {
+    return request<T>(url, 'POST', data, params)
   }
 
   async function put<T>(

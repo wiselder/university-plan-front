@@ -88,9 +88,9 @@
       </option>
 
       <option 
-        v-for="(day, i) in dayOptions" :key="i"
-        :value="day.value">
-        {{ day.text }}
+        v-for="(dayType, i) in dayOptions" :key="i"
+        :value="dayType.value">
+        {{ dayType?.text }}
       </option>     
     </the-select>
   </div>
@@ -102,23 +102,24 @@
     <thead>
       <tr>
         <th/>
-        <th v-for="(day, i) in dayOptions" :key="i" 
+        <th v-for="(dayType, i) in dayOptions" :key="i" 
             class="border border-gray-600">
-          {{ day.text }}
+          {{ dayType.text }}
         </th>
       </tr>
     </thead>
+
     <tbody>
-      <tr v-for="(time, i) in bells" :key="i">
+      <tr v-for="(bell, i) in bells" :key="i">
         <td class="text-center">
-          {{ `${time.start}-${time.finish}` }}
+          {{ `${bell.start}-${bell.finish}` }}
         </td>
-        <td v-for="(day, i) in dayOptions" :key="i" class="border border-gray-600">
-          <!--<div v-if="getLesson(day, time)">
-            <p>{{ getLesson(day, time).lesson.discipline.name }}</p>
-            <p>{{ getLesson(day, time).lesson.teacher.name }}</p>
-            <p>{{ getLesson(day, time).lesson.auditorium.name }}</p>
-          </div>-->
+
+        <td v-for="(dayType, i) in dayOptions" :key="i" 
+            class="border border-gray-600">
+          <lesson-field
+            :lesson="getLesson(bell.ordinal, dayType.text)?.lesson"
+            :groups="getLesson(bell.ordinal, dayType.text)?.groups"/>
         </td>
       </tr>
     </tbody>
@@ -160,18 +161,14 @@
       </the-button>
     </nuxt-link>
   </div>
-
-  {{ teacherWeekPlan }}
-  {{ teacherDayPlan }}
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from '#imports'
+import { ref, computed, watch } from '#imports'
 
 import { useFaculties } from '~/composables/faculties'
 import { useTeachers } from '~/composables/teachers'
 import { usePlans } from '~/composables/plans'
-import { Bell } from '~/models/Bell'
 import { DayType } from '~/models/DayType'
 
 const selectedTime = ref()
@@ -182,68 +179,80 @@ const entities = ['преподаватель', 'группа']
 
 const dayOptions = Object.entries(DayType).map(([key, value]) => ({ value: key, text: value }))
 const isTeacher = computed(() => selectedEntity.value === 'преподаватель')
-const faculty = ref(0)
-const teacherId = ref(0)
+const faculty = ref(1)
+const teacherId = ref(1)
 const groupId = ref(1)
-const data = ref()
-const day = ref()
+const plan = ref()
+const day = ref(DayType.FRIDAY)
 
 const { getList: getTeachers } = useTeachers()
 const { getList: getFaculties, getGroups } = useFaculties()
-const { findByTeacherWeek, findByTeacherDay, 
-        findByGroupWeek, findByGroupDay, getBells } = usePlans()
+const { findByTeacherWeek, findByTeacherDay, getBells } = usePlans()
 
 const { data: bells } = getBells()
 const { data: teachers } = getTeachers()
 const { data: faculties } = getFaculties()
 const { data: groups } = getGroups(faculty)
 
-const teacherDayPlanRequest = computed(() => { 
-  return {
-    day: day.value,
-    teacherId: teacherId.value 
+const teacherDayPlanRequest = ref()
+
+const { data: teacherWeekPlan, refetch: fetchTeacherWeekPlan } = findByTeacherWeek(teacherId)
+const { data: teacherDayPlan, refetch: fetchTeacherDayPlan } = findByTeacherDay(teacherDayPlanRequest)
+
+watch(day, (newValue, oldValue) => {
+  teacherDayPlanRequest.value = {
+    teacherId: teacherId.value,
+    day: newValue
   }
 })
 
-const { data: teacherWeekPlan } = findByTeacherWeek(teacherId)
-const { data: teacherDayPlan } = findByTeacherDay(teacherDayPlanRequest.value)
+watch(teacherId, (newValue, oldValue) => {
+  teacherDayPlanRequest.value = {
+    teacherId: newValue,
+    day: day.value
+  }
+})
+
 
 function search(): void {
-  if (isTeacher.value && selectedTime.value == 'день') {
-    data.value = teacherDayPlan.value
-  }
+  if (isTeacher.value) {
+    if (selectedTime.value === 'день') {
+      fetchTeacherDayPlan()
+      
+      plan.value = teacherDayPlan.value
+      return
+    }
 
-  if (isTeacher.value && selectedTime.value === 'неделя') {    
-    data.value = teacherWeekPlan.value
+    if (selectedTime.value === 'неделя') {
+      fetchTeacherWeekPlan()
 
-    console.log(`data: ${data.value}`)
-  }
-
-  /*if (selectedEntity.value == 'преподаватель' && selectedTime.value == 'день') {
-    data.value = findByTeacherDay()
-  }*/
-
-  if (selectedEntity.value == 'преподаватель' && selectedTime.value == 'неделя') {
-    //data.value = findByTeacherWeek()
-  }
+      plan.value = teacherWeekPlan.value
+      return
+    }
+  } 
 }
 
-function getLesson(day: DayType, time: Bell) {
-  return data.value
+// норм навернул, да?)00
+function getLesson(bellOrdinal: number, dayType: DayType): any {
+  if (plan.value?.day) {
+    return plan.value?.lessons.find((lesson: any) => {
+      const key = Object.keys(DayType)[Object.values(DayType).indexOf(dayType)]
+
+      return lesson.lesson.day === key && lesson.lesson.bell.ordinal === bellOrdinal
+    })
+  }
+
+  return plan.value?.dayPlans.find((dayPlan: any) => {
+    return dayPlan.lessons.find((lesson: any) => {
+      const key = Object.keys(DayType)[Object.values(DayType).indexOf(dayType)]
+
+      return lesson.lesson.day === key && lesson.lesson.bell.ordinal === bellOrdinal
+    })
+  })?.lessons.find((lesson: any) => {
+    const key = Object.keys(DayType)[Object.values(DayType).indexOf(dayType)]
+    
+    return lesson.lesson.day === key && 
+           lesson.lesson.bell.ordinal === bellOrdinal
+  })
 }
-
-/*
-    getLesson(day, time) {
-      if (this.schedule && this.schedule.lessons) {
-        return this.schedule.lessons.find(lesson => lesson.lesson.day === day && lesson.lesson.bell.start.hour === parseInt(time.split(':')[0]))
-      }
-    }*/
-
-function getBellByOrdinal(ordinal: number): Bell | undefined {
-  return bells.value?.find((bell) => bell.ordinal == ordinal)
-}
-
-/* findByTeacherWeek, findByTeacherDay,
-   findByGroupWeek, findByGroupDay,
-   getBells*/
 </script>
